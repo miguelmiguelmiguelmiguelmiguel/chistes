@@ -6,7 +6,7 @@ body {
   align-items: center;
   min-height: 100vh;
   margin: 0;
-  padding: 20px; /* Evita que la caja toque los bordes físicos del móvil */
+  padding: 10px;
   box-sizing: border-box;
 }
 
@@ -14,9 +14,9 @@ body {
 #caja-chiste {
   background-color: white;
   border: 2px solid #000000;
-  width: 100%; /* Ocupa todo el ancho disponible en el móvil */
-  max-width: 450px; /* En PC o pantallas grandes no se estira más de esto */
-  padding: 40px 25px; /* Más espacio interno para que se vea más grande y limpio */
+  width: 95%;
+  max-width: 480px;
+  padding: 35px 20px;
   border-radius: 15px;
   text-align: center;
   box-sizing: border-box;
@@ -24,16 +24,16 @@ body {
 
 #numero-chiste {
   color: #777;
-  font-size: 18px; /* Un tamaño limpio para el título superior */
-  margin-bottom: 15px;
+  font-size: 22px; 
+  margin-bottom: 10px;
 }
 
 #texto-chiste {
-  font-size: 26px; /* Letra grande y legible para leer los chistes en el móvil */
-  margin: 25px 0;
-  line-height: 1.4; /* Espaciado cómodo entre líneas */
-  white-space: pre-line; /* ¡CLAVE! Esto hace que los guiones y saltos de línea se vean bien */
-  min-height: 150px; /* Le da una altura mínima para que la caja no cambie de tamaño bruscamente */
+  font-size: 32px; 
+  margin: 30px 0;
+  line-height: 1.4;
+  white-space: pre-line;
+  min-height: 180px; 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -41,23 +41,21 @@ body {
 
 button {
   width: 100%;
-  padding: 16px; /* Más grueso para que sea fácil de pulsar con el dedo en el móvil */
-  font-size: 20px;
+  font-size: 24px; 
   font-weight: bold;
-  margin-top: 12px;
+  margin-top: 15px;
   cursor: pointer;
-  border-radius: 10px; /* Botones un poco más suaves con las esquinas redondeadas */
-  border: 1px solid #333;
+  border-radius: 10px;
+  border: 2px solid #333; 
 }
 
 /* Esta clase se añade desde JavaScript si el chiste es de humor negro */
 .alerta {
   background-color: #222222 !important;
   color: white !important;
-  border: 5px dotted red !important;
+  border: 3px dotted red !important;
 }
 
-/* Ajuste para que los textos internos de la alerta también se adapten al modo oscuro */
 .alerta #numero-chiste {
   color: #ff4d4d !important;
 }
