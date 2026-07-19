@@ -7,10 +7,10 @@ let chisteSeleccionado = null;
 const caja = document.getElementById("caja-chiste");
 const elNumero = document.getElementById("numero-chiste");
 const elTexto = document.getElementById("texto-chiste");
-const btnSiguiente = document.getElementById("btn-siguiente");
+const btnSiguiente = document.getElementById("boton-siguiente");
 const bloqueAdvertencia = document.getElementById("botones-advertencia");
-const btnVerTodo = document.getElementById("btn-ver-todo");
-const btnSaltar = document.getElementById("btn-saltar");
+const btnVerTodo = document.getElementById("boton-ver-todo");
+const btnSaltar = document.getElementById("boton-saltar");
 
 // 1. LEER EL ARCHIVO JSON AL ENTRAR A LA WEB
 fetch("chistes.json")
