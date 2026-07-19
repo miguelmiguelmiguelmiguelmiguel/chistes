@@ -1,53 +1,47 @@
 // Variables para guardar los datos
 let todosLosChistes = [];
+let chistesPorVer = []; // <- NUEVO: Aquí guardamos solo los que faltan por salir
 let chisteSeleccionado = null;
 
 // Guardamos los elementos de la pantalla en variables
 const caja = document.getElementById("caja-chiste");
 const elNumero = document.getElementById("numero-chiste");
 const elTexto = document.getElementById("texto-chiste");
-const btnSiguiente = document.getElementById("boton-siguiente");
+const btnSiguiente = document.getElementById("btn-siguiente");
 const bloqueAdvertencia = document.getElementById("botones-advertencia");
-const btnVerTodo = document.getElementById("boton-ver-todo");
-const btnSaltar = document.getElementById("boton-saltar");
+const btnVerTodo = document.getElementById("btn-ver-todo");
+const btnSaltar = document.getElementById("btn-saltar");
 
 // 1. LEER EL ARCHIVO JSON AL ENTRAR A LA WEB
 fetch("chistes.json")
   .then(respuesta => respuesta.json())
   .then(datos => {
-    todosLosChistes = datos; // Guardamos los chistes del JSON en nuestra lista
+    todosLosChistes = datos; 
 
     // ASIGNACIÓN DE ID AUTOMÁTICA
     for (let i = 0; i < todosLosChistes.length; i++) {
       todosLosChistes[i].id = i + 1;
     }
 
-    elegirChisteAlAzar();    // Elegimos uno inmediatamente al cargar la web
+    // Clonamos todos los chistes en nuestra lista de "por ver"
+    chistesPorVer = [...todosLosChistes];
+
+    elegirChisteAlAzar();    
   });
 
-// 2. FUNCIÓN PARA ELEGIR CUALQUIER CHISTE AL AZAR (SIN REPETIR EL ACTUAL)
+// 2. FUNCIÓN PARA ELEGIR SIN REPETIR HASTA QUE SE ACABEN
 function elegirChisteAlAzar() {
-  // Si solo tienes un chiste en la lista, no se puede elegir otro diferente
-  if (todosLosChistes.length <= 1) {
-    chisteSeleccionado = todosLosChistes[0];
-    comprobarChiste();
-    return;
+  // Si ya salieron todos los chistes, volvemos a recargar la lista completa
+  if (chistesPorVer.length === 0) {
+    chistesPorVer = [...todosLosChistes];
   }
 
-  let posicionAzar;
-  let nuevoChiste;
-
-  // --- EL TRUCO ESTÁ AQUÍ ---
-  // Hacemos el sorteo la primera vez, y si coincide con el actual, 
-  // el "do-while" obliga a repetir el sorteo hasta que salga uno distinto.
-  do {
-    posicionAzar = Math.floor(Math.random() * todosLosChistes.length);
-    nuevoChiste = todosLosChistes[posicionAzar];
-  } while (chisteSeleccionado !== null && nuevoChiste.id === chisteSeleccionado.id);
-  // --------------------------
-
-  // Guardamos el nuevo chiste elegido como el chiste actual
-  chisteSeleccionado = nuevoChiste;
+  // Elegimos uno al azar pero SOLO de los que quedan por ver
+  let posicionAzar = Math.floor(Math.random() * chistesPorVer.length);
+  chisteSeleccionado = chistesPorVer[posicionAzar];
+  
+  // EL TRUCO: Quitamos este chiste de la lista de pendientes para que no vuelva a salir
+  chistesPorVer.splice(posicionAzar, 1);
   
   comprobarChiste();
 }
@@ -82,21 +76,23 @@ btnVerTodo.onclick = function() {
 
 // 5. BOTÓN: "SALTAR (QUIERO UN CHISTE BLANCO)"
 btnSaltar.onclick = function() {
-  let soloBlancos = todosLosChistes.filter(chiste => chiste.humorNegro === false);
+  // Filtramos los chistes que quedan por ver para buscar solo los blancos
+  let blancosDisponibles = chistesPorVer.filter(chiste => chiste.humorNegro === false);
   
-  // Si solo hay un chiste blanco o ninguno, mostramos lo que haya
-  if (soloBlancos.length === 0) return;
+  // Si no quedan chistes blancos en la lista de pendientes, buscamos en la lista total
+  if (blancosDisponibles.length === 0) {
+    let todosLosBlancos = todosLosChistes.filter(chiste => chiste.humorNegro === false);
+    chistesPorVer = [...todosLosBlancos]; // Reiniciamos los pendientes solo con blancos
+    blancosDisponibles = chistesPorVer;
+  }
   
-  let posicionAzar;
-  let nuevoChiste;
-
-  // Hacemos lo mismo aquí: asegurar que el chiste blanco al azar no sea el mismo que ya está en pantalla
-  do {
-    posicionAzar = Math.floor(Math.random() * soloBlancos.length);
-    nuevoChiste = soloBlancos[posicionAzar];
-  } while (soloBlancos.length > 1 && chisteSeleccionado !== null && nuevoChiste.id === chisteSeleccionado.id);
+  // Elegimos uno al azar de los blancos que quedan
+  let posicionAzar = Math.floor(Math.random() * blancosDisponibles.length);
+  chisteSeleccionado = blancosDisponibles[posicionAzar];
   
-  chisteSeleccionado = nuevoChiste;
+  // Lo quitamos de la lista general de pendientes usando su ID único
+  chistesPorVer = chistesPorVer.filter(chiste => chiste.id !== chisteSeleccionado.id);
+  
   comprobarChiste();
 };
 
