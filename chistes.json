@@ -112,5 +112,6 @@
   { "texto": "¿Si los pitufos fueran gitanos el malo sería válgamel?", "humorNegro": true },
   { "texto": "Mi hija me ganó al ajedrez, pero no tuvo oportunidad contra mí en boxeo.", "humorNegro": true },
   { "texto": "Si vas a la panadería de tu barrio a compar el pan y está cerrada, el dueño está... ¿en panadero desconocido?", "humorNegro": false },
-  { "texto": "\n- ¿Qué significa why en inglés? \n- Por qué. \n- Pues por que quiero saberlo.", "humorNegro": false }
+  { "texto": "\n- ¿Qué significa why en inglés? \n- Por qué. \n- Pues por que quiero saberlo.", "humorNegro": false },
+  { "texto": "\n- ¡Perdone! He perdido a mi hijo en el centro comercial, ¿puedo usar el micrófono? \n- Si claro. \n- Él me dice que quiere divertirse yo le digo que los rumores vuelan...", "humorNegro": false }
 ]
