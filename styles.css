@@ -1,0 +1,45 @@
+/* Centra todo en la pantalla del móvil o PC */
+body {
+  background-color: #f0f0f0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+/* La tarjeta blanca donde van los chistes */
+#caja-chiste {
+  background-color: white;
+  width: 90%;
+  max-width: 400px;
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+}
+
+#numero-chiste {
+  color: #777;
+  font-size: 18px;
+}
+
+#texto-chiste {
+  font-size: 22px;
+  margin: 20px 0;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+/* Esta clase se añade desde JavaScript si el chiste es de humor negro */
+.alerta {
+  background-color: #222222 !important;
+  color: white !important;
+  border: 2px solid red;
+}
