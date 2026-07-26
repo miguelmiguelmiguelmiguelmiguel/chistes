@@ -6,7 +6,7 @@ body {
   align-items: center;
   min-height: 100vh;
   margin: 0;
-  padding: 10px;
+  padding: 8px; 
   box-sizing: border-box;
 }
 
@@ -14,26 +14,31 @@ body {
 #caja-chiste {
   background-color: white;
   border: 2px solid #000000;
-  width: 95%;
+  width: 98%; 
   max-width: 750px;
-  padding: 35px 20px;
-  border-radius: 15px;
+  min-height: 75vh; 
+  padding: 30px 20px;
+  border-radius: 18px;
   text-align: center;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 #numero-chiste {
   color: #777;
-  font-size: 22px; 
+  font-size: 24px; 
   margin-bottom: 10px;
 }
 
 #texto-chiste {
-  font-size: 32px; 
-  margin: 30px 0;
+  font-size: 34px; 
+  margin: 20px 0;
   line-height: 1.4;
   white-space: pre-line;
-  min-height: 180px; 
+  color: #111;
+  flex-grow: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -41,11 +46,12 @@ body {
 
 button {
   width: 100%;
-  font-size: 24px; 
+  padding: 18px; 
+  font-size: 26px; 
   font-weight: bold;
   margin-top: 15px;
   cursor: pointer;
-  border-radius: 10px;
+  border-radius: 12px;
   border: 2px solid #333; 
 }
 

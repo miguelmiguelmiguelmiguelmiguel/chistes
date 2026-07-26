@@ -52,7 +52,7 @@ function comprobarChiste() {
 
   if (chisteSeleccionado.humorNegro === true) {
     caja.classList.add("alerta");
-    elTexto.innerText = "⚠️ OJO: Este chiste contiene humor negro y puede resultar incómodo.";
+    elTexto.innerText = "⚠️ OJO: Este chiste contiene humor negro sin filtro (temas sensibles, explícitos o políticamente incorrectos). Procede bajo tu propio criterio.";
     
     btnSiguiente.style.display = "none";       
     bloqueAdvertencia.style.display = "block"; 
