@@ -28,7 +28,7 @@ body {
 
 #numero-chiste {
   color: #777;
-  font-size: 24px; 
+  font-size: 30px; 
   margin-bottom: 10px;
 }
 
@@ -46,7 +46,7 @@ body {
 
 button {
   width: 100%;
-  padding: 18px; 
+  padding: 25px; 
   font-size: 26px; 
   font-weight: bold;
   margin-top: 15px;
