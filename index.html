@@ -12,11 +12,20 @@
     <p id="texto-chiste">Espera un momento...</p>
     
     <button id="boton-siguiente">Mostrar nuevo chiste</button>
+    <button id="boton-favorito">☆</button>
+    <button id="boton-ver-favoritos">⭐ Favoritos</button>
     
     <div id="botones-advertencia" style="display: none;">
       <button id="boton-ver-todo">Ver chiste de todos modos</button>
       <button id="boton-saltar">Saltar</button>
     </div>
+  </div>
+
+  <div id="vista-favoritos" style="display:none;">
+    <h2>⭐ Tus favoritos</h2>
+    <p><small>Se guardan en la memoria de este navegador — si borras la caché o cambias de dispositivo, se perderán.</small></p>
+    <div id="lista-favoritos"></div>
+    <button id="boton-cerrar-favoritos">Cerrar</button>
   </div>
 
   <script src="script.js"></script>
