@@ -6,7 +6,7 @@ body {
   align-items: center;
   min-height: 100vh;
   margin: 0;
-  padding: 8px; 
+  padding: 8px;
   box-sizing: border-box;
 }
 
@@ -14,9 +14,9 @@ body {
 #caja-chiste {
   background-color: white;
   border: 2px solid #000000;
-  width: 98%; 
+  width: 98%;
   max-width: 750px;
-  min-height: 75vh; 
+  min-height: 75vh;
   padding: 30px 20px;
   border-radius: 18px;
   text-align: center;
@@ -28,12 +28,12 @@ body {
 
 #numero-chiste {
   color: #777;
-  font-size: 30px; 
+  font-size: 30px;
   margin-bottom: 10px;
 }
 
 #texto-chiste {
-  font-size: 34px; 
+  font-size: 34px;
   margin: 20px 0;
   line-height: 1.4;
   white-space: pre-line;
@@ -46,13 +46,13 @@ body {
 
 button {
   width: 100%;
-  padding: 25px; 
-  font-size: 26px; 
+  padding: 25px;
+  font-size: 26px;
   font-weight: bold;
   margin-top: 15px;
   cursor: pointer;
   border-radius: 12px;
-  border: 2px solid #333; 
+  border: 2px solid #333;
 }
 
 /* Esta clase se añade desde JavaScript si el chiste es de humor negro */
@@ -68,4 +68,142 @@ button {
 
 .alerta #texto-chiste {
   color: #ffcccc !important;
+}
+
+/* =========================================================
+   FAVORITOS
+   ========================================================= */
+
+/* Fila que agrupa la estrella y el botón de "Favoritos" */
+#fila-favoritos {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+/* Botón de estrella: cuadrado, no ocupa todo el ancho como los demás botones */
+#boton-favorito {
+  width: auto;
+  flex: 0 0 70px;
+  padding: 10px;
+  font-size: 32px;
+  font-weight: normal;
+  margin-top: 0;
+  background-color: white;
+  border: 2px solid #333;
+  border-radius: 12px;
+  color: #f5b301;
+  line-height: 1;
+}
+
+#boton-favorito:hover {
+  background-color: #fff8e1;
+}
+
+/* Botón "⭐ Favoritos": comparte fila con la estrella, más pequeño que los botones principales */
+#boton-ver-favoritos {
+  width: auto;
+  flex: 1;
+  padding: 10px 16px;
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 0;
+  background-color: #fff4d6;
+  border: 2px solid #f5b301;
+  border-radius: 12px;
+  color: #7a5900;
+}
+
+#boton-ver-favoritos:hover {
+  background-color: #ffe9a8;
+}
+
+/* Panel de favoritos: modal centrado con fondo oscurecido */
+#vista-favoritos {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 90%;
+  max-width: 480px;
+  max-height: 80vh;
+
+  background-color: #fffdf7;
+  border: 2px solid #000000;
+  border-radius: 18px;
+  padding: 24px;
+
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.55);
+
+  overflow-y: auto;
+  z-index: 1000;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+#vista-favoritos h2 {
+  margin-top: 0;
+  color: #7a5900;
+}
+
+#vista-favoritos > p {
+  color: #777;
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+
+#lista-favoritos {
+  text-align: left;
+}
+
+.item-favorito {
+  background-color: #fff;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.item-favorito p {
+  margin: 6px 0;
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.item-favorito strong {
+  color: #444;
+}
+
+.item-favorito hr {
+  display: none;
+}
+
+.boton-quitar-favorito {
+  width: auto;
+  padding: 8px 14px;
+  font-size: 15px;
+  font-weight: normal;
+  margin-top: 6px;
+  background-color: #ffecec;
+  border: 2px solid #e57373;
+  color: #b71c1c;
+  border-radius: 8px;
+}
+
+.boton-quitar-favorito:hover {
+  background-color: #ffd6d6;
+}
+
+#boton-cerrar-favoritos {
+  width: 100%;
+  margin-top: 16px;
+  background-color: #333;
+  color: #fff;
+  border: 2px solid #333;
+}
+
+#boton-cerrar-favoritos:hover {
+  background-color: #555;
 }
