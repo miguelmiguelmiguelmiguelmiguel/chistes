@@ -12,7 +12,7 @@ const bloqueAdvertencia = document.getElementById("botones-advertencia");
 const btnVerTodo = document.getElementById("boton-ver-todo");
 const btnSaltar = document.getElementById("boton-saltar");
 
-// --- NUEVO: elementos de favoritos ---
+// --- Favoritos ---
 const btnFavorito = document.getElementById("boton-favorito");
 const btnVerFavoritos = document.getElementById("boton-ver-favoritos");
 const vistaFavoritos = document.getElementById("vista-favoritos");
@@ -20,6 +20,10 @@ const listaFavoritos = document.getElementById("lista-favoritos");
 const btnCerrarFavoritos = document.getElementById("boton-cerrar-favoritos");
 
 const CLAVE_FAVORITOS = "chistes-favoritos";
+
+// --- NUEVO: audio por chiste ---
+const btnAudio = document.getElementById("boton-audio");
+const CARPETA_SONIDOS = "sonidos/"; // carpeta donde subirás los mp3
 
 // 1. LEER EL ARCHIVO JSON AL ENTRAR A LA WEB
 fetch("chistes.json")
@@ -63,6 +67,7 @@ function comprobarChiste() {
     btnSiguiente.style.display = "none";
     bloqueAdvertencia.style.display = "block";
     if (btnFavorito) btnFavorito.style.display = "none"; // no se puede marcar favorito hasta verlo
+    ocultarBotonAudio(); // tampoco se muestra el altavoz hasta ver el chiste
   } else {
     caja.classList.remove("alerta");
     elTexto.innerText = chisteSeleccionado.texto;
@@ -73,6 +78,7 @@ function comprobarChiste() {
       btnFavorito.style.display = "inline-block";
       actualizarEstrella();
     }
+    actualizarBotonAudio();
   }
 }
 
@@ -87,6 +93,7 @@ btnVerTodo.onclick = function() {
     btnFavorito.style.display = "inline-block";
     actualizarEstrella();
   }
+  actualizarBotonAudio();
 };
 
 // 5. BOTÓN: "SALTAR (QUIERO UN CHISTE BLANCO)"
@@ -111,10 +118,9 @@ btnSaltar.onclick = function() {
 btnSiguiente.onclick = elegirChisteAlAzar;
 
 // ============================
-// NUEVO: FAVORITOS
+// FAVORITOS
 // ============================
 
-// Lee la lista de IDs favoritos guardada en el navegador
 function obtenerFavoritos() {
   const guardado = localStorage.getItem(CLAVE_FAVORITOS);
   return guardado ? JSON.parse(guardado) : [];
@@ -128,13 +134,11 @@ function esFavorito(id) {
   return obtenerFavoritos().includes(id);
 }
 
-// Pinta la estrella llena o vacía según si el chiste actual es favorito
 function actualizarEstrella() {
   if (!btnFavorito || !chisteSeleccionado) return;
   btnFavorito.innerText = esFavorito(chisteSeleccionado.id) ? "★" : "☆";
 }
 
-// Al pulsar la estrella, añade o quita el chiste actual de favoritos
 if (btnFavorito) {
   btnFavorito.onclick = function() {
     let favoritos = obtenerFavoritos();
@@ -151,7 +155,6 @@ if (btnFavorito) {
   };
 }
 
-// Pinta la lista de favoritos en la pestaña
 function mostrarFavoritos() {
   const idsFavoritos = obtenerFavoritos();
   listaFavoritos.innerHTML = "";
@@ -175,14 +178,13 @@ function mostrarFavoritos() {
     listaFavoritos.appendChild(item);
   });
 
-  // Botones de "quitar" de cada favorito
   document.querySelectorAll(".boton-quitar-favorito").forEach(boton => {
     boton.onclick = function() {
       const id = parseInt(boton.dataset.id);
       let favoritos = obtenerFavoritos().filter(favId => favId !== id);
       guardarFavoritos(favoritos);
-      mostrarFavoritos(); // repintar la lista
-      actualizarEstrella(); // por si el chiste quitado es el que está en pantalla
+      mostrarFavoritos();
+      actualizarEstrella();
     };
   });
 }
@@ -197,5 +199,36 @@ if (btnVerFavoritos) {
 if (btnCerrarFavoritos) {
   btnCerrarFavoritos.onclick = function() {
     vistaFavoritos.style.display = "none";
+  };
+}
+
+// ============================
+// NUEVO: AUDIO POR CHISTE
+// ============================
+// Un chiste puede llevar en el JSON un campo "audio": "nombre.mp3"
+// Si lo tiene, aparece el botón 🔊. Al pulsarlo (solo con click del
+// usuario, nunca automático) se reproduce ese sonido una vez.
+
+function actualizarBotonAudio() {
+  if (!btnAudio) return;
+
+  if (chisteSeleccionado && chisteSeleccionado.audio) {
+    btnAudio.style.display = "inline-block";
+  } else {
+    btnAudio.style.display = "none";
+  }
+}
+
+function ocultarBotonAudio() {
+  if (btnAudio) btnAudio.style.display = "none";
+}
+
+if (btnAudio) {
+  btnAudio.onclick = function() {
+    if (!chisteSeleccionado || !chisteSeleccionado.audio) return;
+
+    const sonido = new Audio(CARPETA_SONIDOS + chisteSeleccionado.audio);
+    sonido.volume = 0.15;
+    sonido.play();
   };
 }

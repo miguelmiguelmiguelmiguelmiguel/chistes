@@ -11,12 +11,17 @@
     <h2 id="numero-chiste"></h2>
     <p id="texto-chiste">Espera un momento...</p>
 
-    <button id="boton-siguiente">Mostrar nuevo chiste</button>
+    <div id="fila-principal">
+      <button id="boton-siguiente">Mostrar nuevo chiste</button>
+      <button id="boton-audio" style="display:none;">🔊</button>
+    </div>
 
     <div id="fila-favoritos">
       <button id="boton-favorito">☆</button>
       <button id="boton-ver-favoritos">⭐ Favoritos</button>
     </div>
+
+    <div id="selector-color-fondo"></div>
 
     <div id="botones-advertencia" style="display: none;">
       <button id="boton-ver-todo">Ver chiste de todos modos</button>
@@ -32,5 +37,6 @@
   </div>
 
   <script src="script.js"></script>
+  <script src="selector_color.js"></script>
 </body>
 </html>

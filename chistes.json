@@ -824,5 +824,6 @@
   { "texto": "Llega el marido a su casa y encuentra a su mujer un tanto agitada. Bajo la cama ve el pie de un hombre saliendo de esta. Enfurecido le pregunta:\n- ¿Qué hace ese hombre debajo de la cama?\n- Mira cariño, debajo no sé, pero arriba hace maravillas.", "humorNegro": false },
   { "texto": "- ¡Doctor, doctor, tengo un hueso fuera!\n- Hágalo pasar, por favor.", "humorNegro": false },
   { "texto": "- ¡Profe, profe, mi boli no escribe!\n- Pues dale aliento.\n- ¡Vamos boli, tú puedes, boli!", "humorNegro": false },
-  { "texto": "Dos locos salen al bosque en busca de un pino para decorar su casa en Navidad. Después de horas de búsqueda, uno le dice al otro:\n- Bueno, ¡ya basta! El próximo pino que veamos lo cogemos sí o sí, ¡tenga o no tenga bolas de Navidad!", "humorNegro": false }
+  { "texto": "Dos locos salen al bosque en busca de un pino para decorar su casa en Navidad. Después de horas de búsqueda, uno le dice al otro:\n- Bueno, ¡ya basta! El próximo pino que veamos lo cogemos sí o sí, ¡tenga o no tenga bolas de Navidad!", "humorNegro": false },
+  { "texto": "¿Cómo se dice misterio en chino?\nChan, chan, chaaaan", "humorNegro": false, "audio": "misterio.mp3" }
 ]
