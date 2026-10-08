@@ -6,7 +6,7 @@
   { "texto": "¿Cómo se despiden los plátanos? Hasta banana.", "humorNegro": false },
   { "texto": "¿Qué fruta se lo pasa mejor en los toboganes? El kiwiiiiiiiiii.", "humorNegro": false },
   { "texto": "¿Cuál es la diferencia entre la cocina y el mar? Que en la cocina hay cacerolas y en el mar no hace falta.", "humorNegro": false },
-  { "texto": "¿Dónde vive Bruce Lee? Allá.", "humorNegro": false },
+  { "texto": "¿Dónde vive Bruce Lee? Allá.", "humorNegro": false, "audio": "karate.mp3" },
   { "texto": "¿Qué opina tu jefe de que seas disléxico? Me saluda.", "humorNegro": false },
   { "texto": "¿Cómo se llama la chica que tiene nombre de pizza sin ingredientes? Tomasa.", "humorNegro": false },
   { "texto": "Entra un monje budista a una cafetería:\n- Buenas, quiero té.\n- ¿Algo más?\n- Namasté.", "humorNegro": false },

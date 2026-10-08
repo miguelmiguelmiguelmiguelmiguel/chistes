@@ -1,6 +1,6 @@
 // Variables para guardar los datos
 let todosLosChistes = [];
-let chistesPorVer = []; // <- NUEVO: Aquí guardamos solo los que faltan por salir
+let chistesPorVer = []; // Aquí guardamos solo los que faltan por salir
 let chisteSeleccionado = null;
 
 // Guardamos los elementos de la pantalla en variables
@@ -21,9 +21,14 @@ const btnCerrarFavoritos = document.getElementById("boton-cerrar-favoritos");
 
 const CLAVE_FAVORITOS = "chistes-favoritos";
 
-// --- NUEVO: audio por chiste ---
+// --- Audio por chiste ---
 const btnAudio = document.getElementById("boton-audio");
 const CARPETA_SONIDOS = "sonidos/"; // carpeta donde subirás los mp3
+
+// --- NUEVO: buscador por número ---
+const inputNumero = document.getElementById("input-numero");
+const btnBuscar = document.getElementById("boton-buscar");
+const mensajeBusqueda = document.getElementById("mensaje-busqueda");
 
 // 1. LEER EL ARCHIVO JSON AL ENTRAR A LA WEB
 fetch("chistes.json")
@@ -38,6 +43,13 @@ fetch("chistes.json")
 
     // Clonamos todos los chistes en nuestra lista de "por ver"
     chistesPorVer = [...todosLosChistes];
+
+    // NUEVO: ajustamos los límites del buscador
+    if (inputNumero) {
+      inputNumero.min = 1;
+      inputNumero.max = todosLosChistes.length;
+      inputNumero.placeholder = "1 - " + todosLosChistes.length;
+    }
 
     elegirChisteAlAzar();
   });
@@ -116,6 +128,47 @@ btnSaltar.onclick = function() {
 
 // 6. BOTÓN PRINCIPAL: AL HACER CLICK MUESTRA OTRO CHISTE
 btnSiguiente.onclick = elegirChisteAlAzar;
+
+// ============================
+// NUEVO: BUSCADOR POR NÚMERO
+// ============================
+// Escribes un número, pulsas "Ir" (o Enter) y sale ese chiste.
+// Si es de humor negro, sigue pasando por la advertencia de siempre.
+
+function buscarChistePorNumero() {
+  if (!inputNumero) return;
+
+  const numero = parseInt(inputNumero.value, 10);
+  const total = todosLosChistes.length;
+
+  if (total === 0) return; // el JSON aún no ha cargado
+
+  if (Number.isNaN(numero) || numero < 1 || numero > total) {
+    if (mensajeBusqueda) {
+      mensajeBusqueda.innerText = "Elige un número entre 1 y " + total;
+    }
+    return;
+  }
+
+  if (mensajeBusqueda) mensajeBusqueda.innerText = "";
+
+  chisteSeleccionado = todosLosChistes.find(chiste => chiste.id === numero);
+
+  // Lo quitamos de "por ver" para que no vuelva a salir enseguida al azar
+  chistesPorVer = chistesPorVer.filter(chiste => chiste.id !== numero);
+
+  comprobarChiste();
+}
+
+if (btnBuscar) {
+  btnBuscar.onclick = buscarChistePorNumero;
+}
+
+if (inputNumero) {
+  inputNumero.addEventListener("keydown", function(evento) {
+    if (evento.key === "Enter") buscarChistePorNumero();
+  });
+}
 
 // ============================
 // FAVORITOS
@@ -203,7 +256,7 @@ if (btnCerrarFavoritos) {
 }
 
 // ============================
-// NUEVO: AUDIO POR CHISTE
+// AUDIO POR CHISTE
 // ============================
 // Un chiste puede llevar en el JSON un campo "audio": "nombre.mp3"
 // Si lo tiene, aparece el botón 🔊. Al pulsarlo (solo con click del

@@ -81,6 +81,81 @@ button {
 }
 
 /* =========================================================
+   BUSCADOR POR NÚMERO
+   ========================================================= */
+
+#caja-chiste .buscador {
+  margin-bottom: 4px;
+}
+
+#caja-chiste .buscador label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 18px;
+  color: #666;
+}
+
+/* Fila: cuadro del número a la izquierda, botón "Ir" a la derecha */
+#caja-chiste .buscador-fila {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: 10px;
+}
+
+#caja-chiste .buscador-fila input {
+  flex: 0 1 180px;
+  min-width: 0;
+  width: auto;
+  margin: 0;
+  padding: 10px 12px;
+  font-size: 24px;
+  text-align: center;
+  border: 2px solid #333;
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+#caja-chiste .buscador-fila input:focus {
+  outline: 3px solid rgba(0, 0, 0, 0.25);
+  outline-offset: 1px;
+}
+
+#caja-chiste .buscador-fila button {
+  flex: 0 0 auto;
+  width: auto;
+  margin: 0;
+  padding: 10px 28px;
+  font-size: 24px;
+  background-color: #333;
+  color: #fff;
+  border: 2px solid #333;
+  border-radius: 12px;
+}
+
+#caja-chiste .buscador-fila button:hover {
+  background-color: #555;
+}
+
+/* Hueco fijo para el mensaje de error, así la caja no "salta" */
+#caja-chiste .mensaje-busqueda {
+  min-height: 1.3em;
+  margin: 6px 0 10px;
+  font-size: 16px;
+  color: #b00020;
+}
+
+/* Colores del buscador cuando la caja está en modo humor negro */
+.alerta .buscador label {
+  color: #ffcccc !important;
+}
+
+.alerta .mensaje-busqueda {
+  color: #ff8a80 !important;
+}
+
+/* =========================================================
    FILA PRINCIPAL (botón siguiente + audio)
    ========================================================= */
 

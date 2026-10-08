@@ -1,49 +1,69 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mis Chistes</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <div class="descripcion">
+  <!-- Explicación de la página -->
+  <header class="descripcion">
     <h1>Mis Chistes</h1>
     <p>
       Una colección de chistes que me hacen mucha gracia.
       <br>
       <em>🔊 el siguiente icono significa que el chiste tiene efecto de sonido, es recomendable usarlo en el remate del chiste 🔊</em>
     </p>
-  </div>
+  </header>
 
-  <div id="caja-chiste">
+  <!-- Caja principal del chiste -->
+  <main id="caja-chiste">
+
+    <!-- Buscador por número -->
+    <div class="buscador">
+      <label for="input-numero">Ir al chiste nº</label>
+      <div class="buscador-fila">
+        <input type="number" id="input-numero" min="1" placeholder="Nº de chiste">
+        <button id="boton-buscar">Ir</button>
+      </div>
+    </div>
+    <p id="mensaje-busqueda" class="mensaje-busqueda"></p>
+
+    <!-- Chiste -->
     <h2 id="numero-chiste"></h2>
     <p id="texto-chiste">Espera un momento...</p>
 
+    <!-- Advertencia de humor negro (solo aparece cuando toca) -->
+    <div id="botones-advertencia" style="display: none;">
+      <button id="boton-ver-todo">Ver chiste de todos modos</button>
+      <button id="boton-saltar">Saltar</button>
+    </div>
+
+    <!-- Acciones principales -->
     <div id="fila-principal">
       <button id="boton-siguiente">Mostrar nuevo chiste</button>
       <button id="boton-audio" style="display:none;">🔊</button>
     </div>
 
+    <!-- Favoritos -->
     <div id="fila-favoritos">
       <button id="boton-favorito">☆</button>
       <button id="boton-ver-favoritos">⭐ Favoritos</button>
     </div>
 
+    <!-- Selector de color de fondo -->
     <div id="selector-color-fondo"></div>
+  </main>
 
-    <div id="botones-advertencia" style="display: none;">
-      <button id="boton-ver-todo">Ver chiste de todos modos</button>
-      <button id="boton-saltar">Saltar</button>
-    </div>
-  </div>
-
-  <div id="vista-favoritos" style="display:none;">
+  <!-- Vista de favoritos -->
+  <section id="vista-favoritos" style="display:none;">
     <h2>⭐ Tus favoritos</h2>
     <p><small>Se guardan en la memoria de este navegador — si borras la caché o cambias de dispositivo, se perderán.</small></p>
     <div id="lista-favoritos"></div>
     <button id="boton-cerrar-favoritos">Cerrar</button>
-  </div>
+  </section>
 
   <script src="script.js"></script>
   <script src="selector_color.js"></script>
