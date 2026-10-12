@@ -25,7 +25,7 @@ const CLAVE_FAVORITOS = "chistes-favoritos";
 const btnAudio = document.getElementById("boton-audio");
 const CARPETA_SONIDOS = "sonidos/"; // carpeta donde subirás los mp3
 
-// --- NUEVO: buscador por número ---
+// --- Buscador por número ---
 const inputNumero = document.getElementById("input-numero");
 const btnBuscar = document.getElementById("boton-buscar");
 const mensajeBusqueda = document.getElementById("mensaje-busqueda");
@@ -44,14 +44,24 @@ fetch("chistes.json")
     // Clonamos todos los chistes en nuestra lista de "por ver"
     chistesPorVer = [...todosLosChistes];
 
-    // NUEVO: ajustamos los límites del buscador
+    // Ajustamos los límites del buscador
     if (inputNumero) {
       inputNumero.min = 1;
       inputNumero.max = todosLosChistes.length;
       inputNumero.placeholder = "1 - " + todosLosChistes.length;
     }
 
-    elegirChisteAlAzar();
+    // NUEVO: si venimos de todos.html con ?chiste=N, abrimos ese chiste
+    const numeroUrl = parseInt(new URLSearchParams(window.location.search).get("chiste"), 10);
+    const chisteDeUrl = todosLosChistes.find(chiste => chiste.id === numeroUrl);
+
+    if (chisteDeUrl) {
+      chisteSeleccionado = chisteDeUrl;
+      chistesPorVer = chistesPorVer.filter(chiste => chiste.id !== chisteDeUrl.id);
+      comprobarChiste();
+    } else {
+      elegirChisteAlAzar();
+    }
   });
 
 // 2. FUNCIÓN PARA ELEGIR SIN REPETIR HASTA QUE SE ACABEN
@@ -130,7 +140,7 @@ btnSaltar.onclick = function() {
 btnSiguiente.onclick = elegirChisteAlAzar;
 
 // ============================
-// NUEVO: BUSCADOR POR NÚMERO
+// BUSCADOR POR NÚMERO
 // ============================
 // Escribes un número, pulsas "Ir" (o Enter) y sale ese chiste.
 // Si es de humor negro, sigue pasando por la advertencia de siempre.

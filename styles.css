@@ -237,7 +237,7 @@ button {
   background-color: #ffe9a8;
 }
 
-/* Panel de favoritos: modal centrado con fondo oscurecido */
+/* Panel de favoritos y de listado: modal centrado con fondo oscurecido */
 #vista-favoritos {
   position: fixed;
   top: 50%;
@@ -325,6 +325,154 @@ button {
 
 #boton-cerrar-favoritos:hover {
   background-color: #555;
+}
+
+/* =========================================================
+   NUEVO: ENLACE + PÁGINA "TODOS LOS CHISTES" (todos.html)
+   ========================================================= */
+
+/* Enlace de index.html que lleva a todos.html (con aspecto de botón) */
+#fila-listado {
+  margin-top: 15px;
+}
+
+#enlace-todos {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px 16px;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  background-color: #e8f0fe;
+  border: 2px solid #4a6fa5;
+  border-radius: 12px;
+  color: #1d3b66;
+}
+
+#enlace-todos:hover {
+  background-color: #d2e3fc;
+}
+
+/* En todos.html el contenido empieza arriba (la lista es larga) */
+body.pagina-todos {
+  justify-content: flex-start;
+}
+
+#contenedor-todos {
+  background-color: white;
+  border: 2px solid #000000;
+  width: 98%;
+  max-width: 750px;
+  padding: 30px 20px;
+  border-radius: 18px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+#resumen-todos {
+  color: #777;
+  font-size: 16px;
+  margin: 16px 0;
+}
+
+.enlace-volver {
+  display: block;
+  box-sizing: border-box;
+  padding: 10px 16px;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  background-color: #333;
+  color: #fff;
+  border: 2px solid #333;
+  border-radius: 12px;
+}
+
+.enlace-volver:hover {
+  background-color: #555;
+}
+
+#lista-chistes {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.item-listado {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.item-listado p {
+  margin: 6px 0;
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.item-listado .titulo-listado {
+  color: #444;
+  font-weight: bold;
+}
+
+.item-listado .texto-listado {
+  white-space: pre-line;
+  color: #111;
+}
+
+/* Chistes de humor negro: tarjeta oscura, igual que la caja principal */
+.item-listado.item-negro {
+  background-color: #222;
+  border: 2px dotted red;
+}
+
+.item-listado.item-negro .titulo-listado {
+  color: #ff4d4d;
+}
+
+.item-listado.item-negro .texto-listado {
+  color: #ffcccc;
+}
+
+/* Botones y enlaces dentro de cada chiste */
+.item-listado button,
+.item-listado a.enlace-abrir {
+  display: inline-block;
+  width: auto;
+  box-sizing: border-box;
+  padding: 8px 14px;
+  font-size: 15px;
+  font-weight: normal;
+  text-decoration: none;
+  margin-top: 6px;
+  margin-right: 6px;
+  background-color: #e8f0fe;
+  border: 2px solid #4a6fa5;
+  color: #1d3b66;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.item-listado button:hover,
+.item-listado a.enlace-abrir:hover {
+  background-color: #d2e3fc;
+}
+
+.item-listado.item-negro button,
+.item-listado.item-negro a.enlace-abrir {
+  background-color: #333;
+  border-color: #ff4d4d;
+  color: #ffcccc;
+}
+
+.item-listado.item-negro button:hover,
+.item-listado.item-negro a.enlace-abrir:hover {
+  background-color: #444;
 }
 
 /* =========================================================
