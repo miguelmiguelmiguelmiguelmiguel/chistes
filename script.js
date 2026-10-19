@@ -25,6 +25,10 @@ const CLAVE_FAVORITOS = "chistes-favoritos";
 const btnAudio = document.getElementById("boton-audio");
 const CARPETA_SONIDOS = "sonidos/"; // carpeta donde subirás los mp3
 
+// --- Explicación del chiste (se desbloquea con una palabra secreta) ---
+const btnExplicacion = document.getElementById("boton-explicacion");
+const elExplicacion = document.getElementById("explicacion-chiste");
+
 // --- Buscador ---
 const inputNumero = document.getElementById("input-numero");
 const btnBuscar = document.getElementById("boton-buscar");
@@ -80,6 +84,7 @@ function elegirChisteAlAzar() {
 // 3. COMPROBAR SI ES HUMOR NEGRO O NORMAL
 function comprobarChiste() {
   elNumero.innerText = "Chiste #" + chisteSeleccionado.id;
+  ocultarExplicacion(); // la explicación se cierra al cambiar de chiste
 
   if (chisteSeleccionado.humorNegro === true) {
     caja.classList.add("alerta");
@@ -89,6 +94,7 @@ function comprobarChiste() {
     bloqueAdvertencia.style.display = "block";
     if (btnFavorito) btnFavorito.style.display = "none"; // no se puede marcar favorito hasta verlo
     ocultarBotonAudio(); // tampoco se muestra el altavoz hasta ver el chiste
+    ocultarBotonExplicacion(); // ni la explicación (revelaría el chiste)
   } else {
     caja.classList.remove("alerta");
     elTexto.innerText = chisteSeleccionado.texto;
@@ -100,6 +106,7 @@ function comprobarChiste() {
       actualizarEstrella();
     }
     actualizarBotonAudio();
+    actualizarBotonExplicacion();
   }
 }
 
@@ -115,6 +122,7 @@ btnVerTodo.onclick = function() {
     actualizarEstrella();
   }
   actualizarBotonAudio();
+  actualizarBotonExplicacion();
 };
 
 // 5. BOTÓN: "SALTAR (QUIERO UN CHISTE BLANCO)"
@@ -157,13 +165,14 @@ const MIN_LETRAS_BUSQUEDA = 2;
 // Formato:   "palabra": function() { ...lo que quieres que pase... },
 // - No importan las mayúsculas ni las tildes ("Abracadabra" = "abracádabra").
 // - Dentro de cada function puedes usar:
+//     desbloquearExplicacion();                 -> activa el botón de explicación
 //     mostrarTextoEnPanel("Título", "Texto");   -> abre un panel con un mensaje
 //     mostrarChistePorId(17);                   -> abre el chiste nº 17
-// - Para añadir otra, copia una línea entera y cambia la palabra y la acción.
+// - Para añadir otra, copia una entrada entera y cambia la palabra y la acción.
 const PALABRAS_SECRETAS = {
 
-  "abracadabra": function() {
-    mostrarTextoEnPanel("🤫 Sección secreta", "Aquí irá lo que desbloquee esta palabra.");
+  "reside": function() {
+    desbloquearExplicacion();
   },
 
   // "otra palabra": function() {
@@ -483,13 +492,75 @@ if (btnAudio) {
 }
 
 // ============================
+// EXPLICACIÓN DEL CHISTE (se desbloquea con una palabra secreta)
+// ============================
+// Al escribir la palabra secreta en el buscador aparece un botón en la caja.
+// Al pulsarlo se muestra, debajo del chiste, la explicación de ese chiste
+// (y al pulsarlo otra vez se oculta). El botón se queda en todos los chistes
+// hasta que se recargue la página.
+//
+// Cada chiste lleva su explicación en chistes.json, con el campo "explicacion":
+//   { "texto": "...", "humorNegro": false, "explicacion": "La gracia está en..." }
+// Si un chiste no tiene "explicacion", el botón avisa de que todavía no la tiene.
+// Los chistes de humor negro no enseñan el botón hasta que se ve el chiste.
+
+// AJUSTES QUE PUEDES TOCAR
+const TEXTO_BOTON_EXPLICACION = "reside";                               // lo que pone en el botón
+const TEXTO_SIN_EXPLICACION = "Este chiste todavía no tiene explicación."; // si el chiste no la tiene
+
+let explicacionDesbloqueada = false; // pasa a true al escribir la palabra secreta
+
+// La llama la palabra secreta
+function desbloquearExplicacion() {
+  explicacionDesbloqueada = true;
+  if (btnExplicacion) btnExplicacion.innerText = TEXTO_BOTON_EXPLICACION;
+
+  // Si ahora mismo hay un aviso de humor negro en pantalla, el botón espera a que se vea el chiste
+  if (bloqueAdvertencia.style.display !== "block") actualizarBotonExplicacion();
+}
+
+// Muestra el botón solo si ya se desbloqueó
+function actualizarBotonExplicacion() {
+  if (!btnExplicacion) return;
+  btnExplicacion.style.display = explicacionDesbloqueada ? "block" : "none";
+}
+
+function ocultarBotonExplicacion() {
+  if (btnExplicacion) btnExplicacion.style.display = "none";
+}
+
+// Esconde y vacía el texto de la explicación
+function ocultarExplicacion() {
+  if (!elExplicacion) return;
+  elExplicacion.style.display = "none";
+  elExplicacion.innerText = "";
+}
+
+// Botón: muestra u oculta la explicación del chiste actual
+function alternarExplicacion() {
+  if (!chisteSeleccionado || !elExplicacion) return;
+
+  if (elExplicacion.style.display === "block") {
+    ocultarExplicacion();
+    return;
+  }
+
+  elExplicacion.innerText = chisteSeleccionado.explicacion || TEXTO_SIN_EXPLICACION;
+  elExplicacion.style.display = "block";
+}
+
+if (btnExplicacion) {
+  btnExplicacion.onclick = alternarExplicacion;
+}
+
+// ============================
 // TAMAÑO DEL TEXTO (-A / +A)
 // ============================
 // Los botones -A y +A cambian el tamaño del texto del chiste.
 // El tamaño elegido se guarda en el navegador del visitante.
 
 // AJUSTES QUE PUEDES TOCAR (todo en píxeles)
-const TAM_INICIAL = 34;  // tamaño por defecto
+const TAM_INICIAL = 34;  // tamaño por defecto (ponlo igual que el font-size de #texto-chiste en styles.css)
 const TAM_MIN = 18;      // lo más pequeño que se puede poner
 const TAM_MAX = 60;      // lo más grande que se puede poner
 const TAM_PASO = 4;      // cuánto cambia cada vez que se pulsa
@@ -501,18 +572,29 @@ const btnTextoMas = document.getElementById("boton-texto-mas");
 
 let tamanoTexto = TAM_INICIAL;
 
-// Lee el tamaño guardado (si lo hay) respetando el mínimo y el máximo
+// Lee el tamaño guardado (si lo hay) respetando el mínimo y el máximo.
+// El try/catch evita errores en navegadores que bloquean el almacenamiento.
 function cargarTamano() {
-  const guardado = parseInt(localStorage.getItem(CLAVE_TAMANO), 10);
+  let guardado = NaN;
+  try {
+    guardado = parseInt(localStorage.getItem(CLAVE_TAMANO), 10);
+  } catch (error) {}
+
   if (!Number.isNaN(guardado)) {
     tamanoTexto = Math.min(TAM_MAX, Math.max(TAM_MIN, guardado));
   }
 }
 
-// Aplica el tamaño a la web (el CSS lo lee desde la variable --tam-texto)
+function guardarTamano() {
+  try {
+    localStorage.setItem(CLAVE_TAMANO, tamanoTexto);
+  } catch (error) {}
+}
+
+// Aplica el tamaño directamente al texto del chiste
 function aplicarTamano() {
-  document.documentElement.style.setProperty("--tam-texto", tamanoTexto + "px");
-  localStorage.setItem(CLAVE_TAMANO, tamanoTexto);
+  elTexto.style.fontSize = tamanoTexto + "px";
+  guardarTamano();
 
   // Se desactiva el botón cuando ya no se puede ir más allá
   if (btnTextoMenos) btnTextoMenos.disabled = tamanoTexto <= TAM_MIN;

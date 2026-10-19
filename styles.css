@@ -1,3 +1,9 @@
+/* Evita que el móvil agrande el texto por su cuenta (así manda el tamaño que elijas) */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 body {
   background-color: #f0f0f0;
   font-family: Arial, sans-serif;
@@ -43,7 +49,7 @@ body {
 }
 
 #texto-chiste {
-  font-size: var(--tam-texto, 34px);
+  font-size: 34px; /* los botones -A / +A lo cambian desde script.js */
   margin: 20px 0;
   line-height: 1.4;
   white-space: pre-line;
@@ -493,6 +499,7 @@ body.pagina-todos {
 }
 
 #fila-tamano button {
+  touch-action: manipulation; /* en el móvil, pulsar dos veces seguidas no hace zoom */
   width: auto;
   margin-top: 0;
   padding: 6px 18px;
@@ -521,6 +528,40 @@ body.pagina-todos {
 #lista-panel > p {
   font-size: 18px;
   line-height: 1.4;
+}
+
+/* =========================================================
+   EXPLICACIÓN DEL CHISTE (palabra secreta)
+   ========================================================= */
+
+/* Texto de la explicación, debajo del chiste */
+#explicacion-chiste {
+  margin: 10px 0 0;
+  padding: 12px 16px;
+  font-size: 20px;
+  line-height: 1.4;
+  text-align: left;
+  white-space: pre-line;
+  color: #333;
+  background-color: #f6f1ff;
+  border-left: 5px solid #8a5cd6;
+  border-radius: 10px;
+}
+
+/* Botón que muestra/oculta la explicación */
+#boton-explicacion {
+  width: 100%;
+  padding: 10px 16px;
+  font-size: 20px;
+  margin-top: 10px;
+  background-color: #f1e8ff;
+  border: 2px solid #8a5cd6;
+  color: #3d1a80;
+  border-radius: 12px;
+}
+
+#boton-explicacion:hover {
+  background-color: #e3d2ff;
 }
 
 /* =========================================================

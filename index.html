@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mis Chistes</title>
-  <link rel="stylesheet" href="styles.css">
+  <!-- Si cambias styles.css o script.js y en el móvil no se nota, sube el número de ?v= -->
+  <link rel="stylesheet" href="styles.css?v=3">
 </head>
 <body>
 
@@ -35,6 +36,10 @@
     <!-- Chiste -->
     <h2 id="numero-chiste"></h2>
     <p id="texto-chiste">Espera un momento...</p>
+
+    <!-- Explicación del chiste (el botón aparece al escribir la palabra secreta) -->
+    <p id="explicacion-chiste" style="display:none;"></p>
+    <button id="boton-explicacion" style="display:none;"></button>
 
     <!-- Tamaño del texto -->
     <div id="fila-tamano">
@@ -84,7 +89,7 @@
     <button id="boton-cerrar-panel">Cerrar</button>
   </section>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=3"></script>
   <script src="selector_color.js"></script>
 </body>
 </html>
