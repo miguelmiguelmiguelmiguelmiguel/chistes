@@ -22,11 +22,11 @@
   <!-- Caja principal del chiste -->
   <main id="caja-chiste">
 
-    <!-- Buscador por número -->
+    <!-- Buscador: número, palabra o palabra secreta -->
     <div class="buscador">
-      <label for="input-numero">Ir al chiste nº</label>
+      <label for="input-numero">Buscar por número o palabra</label>
       <div class="buscador-fila">
-        <input type="number" id="input-numero" min="1" placeholder="Nº de chiste">
+        <input type="text" id="input-numero" placeholder="Nº o palabra" autocomplete="off">
         <button id="boton-buscar">Ir</button>
       </div>
     </div>
@@ -35,6 +35,12 @@
     <!-- Chiste -->
     <h2 id="numero-chiste"></h2>
     <p id="texto-chiste">Espera un momento...</p>
+
+    <!-- Tamaño del texto -->
+    <div id="fila-tamano">
+      <button id="boton-texto-menos" aria-label="Reducir texto">−A</button>
+      <button id="boton-texto-mas" aria-label="Aumentar texto">+A</button>
+    </div>
 
     <!-- Advertencia de humor negro (solo aparece cuando toca) -->
     <div id="botones-advertencia" style="display: none;">
@@ -69,6 +75,13 @@
     <p><small>Se guardan en la memoria de este navegador — si borras la caché o cambias de dispositivo, se perderán.</small></p>
     <div id="lista-favoritos"></div>
     <button id="boton-cerrar-favoritos">Cerrar</button>
+  </section>
+
+  <!-- Panel del buscador: resultados por palabra y palabras secretas -->
+  <section id="vista-panel" style="display:none;">
+    <h2 id="titulo-panel"></h2>
+    <div id="lista-panel"></div>
+    <button id="boton-cerrar-panel">Cerrar</button>
   </section>
 
   <script src="script.js"></script>

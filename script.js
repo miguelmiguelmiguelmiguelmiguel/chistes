@@ -25,10 +25,16 @@ const CLAVE_FAVORITOS = "chistes-favoritos";
 const btnAudio = document.getElementById("boton-audio");
 const CARPETA_SONIDOS = "sonidos/"; // carpeta donde subirás los mp3
 
-// --- Buscador por número ---
+// --- Buscador ---
 const inputNumero = document.getElementById("input-numero");
 const btnBuscar = document.getElementById("boton-buscar");
 const mensajeBusqueda = document.getElementById("mensaje-busqueda");
+
+// Panel emergente del buscador (lo usan los resultados y las palabras secretas)
+const vistaPanel = document.getElementById("vista-panel");
+const tituloPanel = document.getElementById("titulo-panel");
+const listaPanel = document.getElementById("lista-panel");
+const btnCerrarPanel = document.getElementById("boton-cerrar-panel");
 
 // 1. LEER EL ARCHIVO JSON AL ENTRAR A LA WEB
 fetch("chistes.json")
@@ -43,13 +49,6 @@ fetch("chistes.json")
 
     // Clonamos todos los chistes en nuestra lista de "por ver"
     chistesPorVer = [...todosLosChistes];
-
-    // Ajustamos los límites del buscador
-    if (inputNumero) {
-      inputNumero.min = 1;
-      inputNumero.max = todosLosChistes.length;
-      inputNumero.placeholder = "1 - " + todosLosChistes.length;
-    }
 
     // NUEVO: si venimos de todos.html con ?chiste=N, abrimos ese chiste
     const numeroUrl = parseInt(new URLSearchParams(window.location.search).get("chiste"), 10);
@@ -140,45 +139,232 @@ btnSaltar.onclick = function() {
 btnSiguiente.onclick = elegirChisteAlAzar;
 
 // ============================
-// BUSCADOR POR NÚMERO
+// BUSCADOR (número, palabra y palabras secretas)
 // ============================
-// Escribes un número, pulsas "Ir" (o Enter) y sale ese chiste.
-// Si es de humor negro, sigue pasando por la advertencia de siempre.
+// Lo que escribas en el cuadro se interpreta así, por este orden:
+//   1. Si es una PALABRA SECRETA  -> hace lo que tú definas abajo.
+//   2. Si es un NÚMERO (ej. 17)   -> abre ese chiste.
+//   3. Si no, es una PALABRA      -> lista todos los chistes que la contienen.
 
-function buscarChistePorNumero() {
-  if (!inputNumero) return;
+// ---------------------------------------------------------------
+// AJUSTES QUE PUEDES TOCAR
+// ---------------------------------------------------------------
 
-  const numero = parseInt(inputNumero.value, 10);
-  const total = todosLosChistes.length;
+// Mínimo de letras para buscar por palabra
+const MIN_LETRAS_BUSQUEDA = 2;
 
-  if (total === 0) return; // el JSON aún no ha cargado
+// PALABRAS SECRETAS.
+// Formato:   "palabra": function() { ...lo que quieres que pase... },
+// - No importan las mayúsculas ni las tildes ("Abracadabra" = "abracádabra").
+// - Dentro de cada function puedes usar:
+//     mostrarTextoEnPanel("Título", "Texto");   -> abre un panel con un mensaje
+//     mostrarChistePorId(17);                   -> abre el chiste nº 17
+// - Para añadir otra, copia una línea entera y cambia la palabra y la acción.
+const PALABRAS_SECRETAS = {
 
-  if (Number.isNaN(numero) || numero < 1 || numero > total) {
-    if (mensajeBusqueda) {
-      mensajeBusqueda.innerText = "Elige un número entre 1 y " + total;
-    }
-    return;
-  }
+  "abracadabra": function() {
+    mostrarTextoEnPanel("🤫 Sección secreta", "Aquí irá lo que desbloquee esta palabra.");
+  },
 
-  if (mensajeBusqueda) mensajeBusqueda.innerText = "";
+  // "otra palabra": function() {
+  //   mostrarChistePorId(1);
+  // },
 
-  chisteSeleccionado = todosLosChistes.find(chiste => chiste.id === numero);
+};
+
+// ---------------------------------------------------------------
+// FUNCIONES (normalmente no hace falta tocar nada de aquí para abajo)
+// ---------------------------------------------------------------
+
+// Quita mayúsculas y tildes para comparar: "Cámara" == "camara"
+function normalizar(texto) {
+  return texto
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+}
+
+function mostrarMensajeBusqueda(texto) {
+  if (mensajeBusqueda) mensajeBusqueda.innerText = texto;
+}
+
+// --- Panel emergente ---
+
+// Abre el panel con un título y lo deja vacío. Devuelve la zona donde añadir cosas.
+function abrirPanel(titulo) {
+  tituloPanel.innerText = titulo;
+  listaPanel.innerHTML = "";
+  vistaPanel.style.display = "block";
+  vistaPanel.scrollTop = 0;
+  return listaPanel;
+}
+
+function cerrarPanel() {
+  if (vistaPanel) vistaPanel.style.display = "none";
+}
+
+function mostrarTextoEnPanel(titulo, texto) {
+  const zona = abrirPanel(titulo);
+  const parrafo = document.createElement("p");
+  parrafo.innerText = texto;
+  zona.appendChild(parrafo);
+}
+
+// --- Abrir un chiste concreto en la caja (respeta el aviso de humor negro) ---
+
+function mostrarChistePorId(id) {
+  const chiste = todosLosChistes.find(c => c.id === id);
+  if (!chiste) return;
+
+  chisteSeleccionado = chiste;
 
   // Lo quitamos de "por ver" para que no vuelva a salir enseguida al azar
-  chistesPorVer = chistesPorVer.filter(chiste => chiste.id !== numero);
+  chistesPorVer = chistesPorVer.filter(c => c.id !== id);
 
   comprobarChiste();
 }
 
+// --- Búsqueda por número ---
+
+function buscarChistePorNumero(numero) {
+  const total = todosLosChistes.length;
+
+  if (numero < 1 || numero > total) {
+    mostrarMensajeBusqueda("Elige un número entre 1 y " + total);
+    return;
+  }
+
+  mostrarMensajeBusqueda("");
+  mostrarChistePorId(numero);
+}
+
+// --- Búsqueda por palabra ---
+
+function buscarChistesPorPalabra(consulta) {
+  const buscado = normalizar(consulta);
+
+  if (buscado.length < MIN_LETRAS_BUSQUEDA) {
+    mostrarMensajeBusqueda("Escribe al menos " + MIN_LETRAS_BUSQUEDA + " letras");
+    return;
+  }
+
+  const encontrados = todosLosChistes.filter(c => normalizar(c.texto).includes(buscado));
+
+  if (encontrados.length === 0) {
+    mostrarMensajeBusqueda("No hay chistes con «" + consulta + "»");
+    return;
+  }
+
+  mostrarMensajeBusqueda("");
+  mostrarResultados(consulta, encontrados);
+}
+
+// Pinta en el panel la lista de chistes encontrados
+function mostrarResultados(consulta, lista) {
+  const textoTitulo = lista.length === 1
+    ? "1 chiste con «" + consulta + "»"
+    : lista.length + " chistes con «" + consulta + "»";
+
+  const zona = abrirPanel(textoTitulo);
+
+  lista.forEach(chiste => {
+    const esNegro = chiste.humorNegro === true;
+
+    // Usamos las mismas clases que la página todos.html
+    const item = document.createElement("div");
+    item.classList.add("item-listado");
+    if (esNegro) item.classList.add("item-negro");
+
+    const titulo = document.createElement("p");
+    titulo.classList.add("titulo-listado");
+    titulo.innerText = "Chiste #" + chiste.id;
+
+    const texto = document.createElement("p");
+    texto.classList.add("texto-listado");
+    // El humor negro no se enseña en la lista: se avisa al abrirlo
+    texto.innerText = esNegro
+      ? "⚠️ Humor negro (se avisará antes de mostrarlo)"
+      : chiste.texto;
+
+    const boton = document.createElement("button");
+    boton.innerText = "Ver este chiste";
+    boton.onclick = function() {
+      cerrarPanel();
+      mostrarChistePorId(chiste.id);
+    };
+
+    item.append(titulo, texto, boton);
+    zona.appendChild(item);
+  });
+}
+
+// --- Palabras secretas ---
+
+// Devuelve true si lo escrito era una palabra secreta (y ejecuta su acción)
+function probarPalabraSecreta(consulta) {
+  const buscada = normalizar(consulta);
+
+  for (const palabra in PALABRAS_SECRETAS) {
+    if (normalizar(palabra) === buscada) {
+      PALABRAS_SECRETAS[palabra]();
+      return true;
+    }
+  }
+  return false;
+}
+
+// --- Decide qué hacer con lo escrito ---
+
+function ejecutarBusqueda() {
+  if (!inputNumero) return;
+
+  const consulta = inputNumero.value.trim();
+
+  if (consulta === "") {
+    mostrarMensajeBusqueda("Escribe un número o una palabra");
+    return;
+  }
+
+  // 1. ¿Palabra secreta?
+  if (probarPalabraSecreta(consulta)) {
+    inputNumero.value = "";
+    mostrarMensajeBusqueda("");
+    return;
+  }
+
+  if (todosLosChistes.length === 0) return; // el JSON aún no ha cargado
+
+  // 2. ¿Número?   3. Si no, palabra
+  if (/^\d+$/.test(consulta)) {
+    buscarChistePorNumero(parseInt(consulta, 10));
+  } else {
+    buscarChistesPorPalabra(consulta);
+  }
+}
+
+// --- Conexión con los botones ---
+
 if (btnBuscar) {
-  btnBuscar.onclick = buscarChistePorNumero;
+  btnBuscar.onclick = ejecutarBusqueda;
 }
 
 if (inputNumero) {
   inputNumero.addEventListener("keydown", function(evento) {
-    if (evento.key === "Enter") buscarChistePorNumero();
+    if (evento.key === "Enter") ejecutarBusqueda();
   });
 }
+
+if (btnCerrarPanel) {
+  btnCerrarPanel.onclick = cerrarPanel;
+}
+
+// La tecla Escape cierra los paneles emergentes
+document.addEventListener("keydown", function(evento) {
+  if (evento.key !== "Escape") return;
+  cerrarPanel();
+  if (vistaFavoritos) vistaFavoritos.style.display = "none";
+});
 
 // ============================
 // FAVORITOS
@@ -295,3 +481,52 @@ if (btnAudio) {
     sonido.play();
   };
 }
+
+// ============================
+// TAMAÑO DEL TEXTO (-A / +A)
+// ============================
+// Los botones -A y +A cambian el tamaño del texto del chiste.
+// El tamaño elegido se guarda en el navegador del visitante.
+
+// AJUSTES QUE PUEDES TOCAR (todo en píxeles)
+const TAM_INICIAL = 34;  // tamaño por defecto
+const TAM_MIN = 18;      // lo más pequeño que se puede poner
+const TAM_MAX = 60;      // lo más grande que se puede poner
+const TAM_PASO = 4;      // cuánto cambia cada vez que se pulsa
+
+const CLAVE_TAMANO = "chistes-tamano-texto";
+
+const btnTextoMenos = document.getElementById("boton-texto-menos");
+const btnTextoMas = document.getElementById("boton-texto-mas");
+
+let tamanoTexto = TAM_INICIAL;
+
+// Lee el tamaño guardado (si lo hay) respetando el mínimo y el máximo
+function cargarTamano() {
+  const guardado = parseInt(localStorage.getItem(CLAVE_TAMANO), 10);
+  if (!Number.isNaN(guardado)) {
+    tamanoTexto = Math.min(TAM_MAX, Math.max(TAM_MIN, guardado));
+  }
+}
+
+// Aplica el tamaño a la web (el CSS lo lee desde la variable --tam-texto)
+function aplicarTamano() {
+  document.documentElement.style.setProperty("--tam-texto", tamanoTexto + "px");
+  localStorage.setItem(CLAVE_TAMANO, tamanoTexto);
+
+  // Se desactiva el botón cuando ya no se puede ir más allá
+  if (btnTextoMenos) btnTextoMenos.disabled = tamanoTexto <= TAM_MIN;
+  if (btnTextoMas) btnTextoMas.disabled = tamanoTexto >= TAM_MAX;
+}
+
+function cambiarTamano(cambio) {
+  tamanoTexto = Math.min(TAM_MAX, Math.max(TAM_MIN, tamanoTexto + cambio));
+  aplicarTamano();
+}
+
+if (btnTextoMenos) btnTextoMenos.onclick = function() { cambiarTamano(-TAM_PASO); };
+if (btnTextoMas) btnTextoMas.onclick = function() { cambiarTamano(TAM_PASO); };
+
+// Al cargar la web
+cargarTamano();
+aplicarTamano();

@@ -43,7 +43,7 @@ body {
 }
 
 #texto-chiste {
-  font-size: 34px;
+  font-size: var(--tam-texto, 34px);
   margin: 20px 0;
   line-height: 1.4;
   white-space: pre-line;
@@ -81,7 +81,7 @@ button {
 }
 
 /* =========================================================
-   BUSCADOR POR NÚMERO
+   BUSCADOR (número, palabra y palabras secretas)
    ========================================================= */
 
 #caja-chiste .buscador {
@@ -105,7 +105,8 @@ button {
 }
 
 #caja-chiste .buscador-fila input {
-  flex: 0 1 180px;
+  flex: 1 1 200px;
+  max-width: 280px;
   min-width: 0;
   width: auto;
   margin: 0;
@@ -237,8 +238,9 @@ button {
   background-color: #ffe9a8;
 }
 
-/* Panel de favoritos y de listado: modal centrado con fondo oscurecido */
-#vista-favoritos {
+/* Paneles emergentes (favoritos y buscador): modal centrado con fondo oscurecido */
+#vista-favoritos,
+#vista-panel {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -261,7 +263,8 @@ button {
   box-sizing: border-box;
 }
 
-#vista-favoritos h2 {
+#vista-favoritos h2,
+#vista-panel h2 {
   margin-top: 0;
   color: #7a5900;
 }
@@ -272,7 +275,8 @@ button {
   margin-bottom: 16px;
 }
 
-#lista-favoritos {
+#lista-favoritos,
+#lista-panel {
   text-align: left;
 }
 
@@ -315,7 +319,8 @@ button {
   background-color: #ffd6d6;
 }
 
-#boton-cerrar-favoritos {
+#boton-cerrar-favoritos,
+#boton-cerrar-panel {
   width: 100%;
   margin-top: 16px;
   background-color: #333;
@@ -323,7 +328,8 @@ button {
   border: 2px solid #333;
 }
 
-#boton-cerrar-favoritos:hover {
+#boton-cerrar-favoritos:hover,
+#boton-cerrar-panel:hover {
   background-color: #555;
 }
 
@@ -473,6 +479,48 @@ body.pagina-todos {
 .item-listado.item-negro button:hover,
 .item-listado.item-negro a.enlace-abrir:hover {
   background-color: #444;
+}
+
+/* =========================================================
+   TAMAÑO DEL TEXTO (-A / +A)
+   ========================================================= */
+
+#fila-tamano {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+#fila-tamano button {
+  width: auto;
+  margin-top: 0;
+  padding: 6px 18px;
+  font-size: 18px;
+  background-color: white;
+  color: #333;
+  border: 2px solid #333;
+  border-radius: 10px;
+}
+
+#fila-tamano button:hover:not(:disabled) {
+  background-color: #f5f5f5;
+}
+
+/* Botón apagado cuando ya no se puede reducir/ampliar más */
+#fila-tamano button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   PANEL DEL BUSCADOR (los chistes encontrados usan .item-listado)
+   ========================================================= */
+
+/* Mensajes sueltos del panel (p. ej. el de una palabra secreta) */
+#lista-panel > p {
+  font-size: 18px;
+  line-height: 1.4;
 }
 
 /* =========================================================
