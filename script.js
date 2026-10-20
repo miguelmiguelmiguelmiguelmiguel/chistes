@@ -171,7 +171,7 @@ const MIN_LETRAS_BUSQUEDA = 2;
 // - Para añadir otra, copia una entrada entera y cambia la palabra y la acción.
 const PALABRAS_SECRETAS = {
 
-  "reside": function() {
+  "la gracia reside": function() {
     desbloquearExplicacion();
   },
 
@@ -505,7 +505,7 @@ if (btnAudio) {
 // Los chistes de humor negro no enseñan el botón hasta que se ve el chiste.
 
 // AJUSTES QUE PUEDES TOCAR
-const TEXTO_BOTON_EXPLICACION = "reside";                               // lo que pone en el botón
+const TEXTO_BOTON_EXPLICACION = "¿Dónde reside la gracia?";                               // lo que pone en el botón
 const TEXTO_SIN_EXPLICACION = "Este chiste todavía no tiene explicación."; // si el chiste no la tiene
 
 let explicacionDesbloqueada = false; // pasa a true al escribir la palabra secreta
